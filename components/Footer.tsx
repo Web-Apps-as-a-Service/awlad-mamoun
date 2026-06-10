@@ -39,7 +39,7 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-muted-foreground leading-relaxed">
-              متخصصون في بيع العجل وقطع الغيار والإكسسوارات. خليك في المضمون مع أولاد مأمون.
+              متخصصون في بيع الدراجات وقطع الغيار والإكسسوارات. خليك في المضمون مع أولاد مأمون.
             </p>
             <p className="mt-3 text-sm text-muted-foreground">
               تم تصميم وتطوير هذا الموقع بواسطة <b>Mahmoud Fayez</b> و <b>Mahmoud Elabady</b>
