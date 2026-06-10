@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation";
 import { Skeleton } from "./ui/skeleton";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { Bike } from "lucide-react";
 import { getFirstImage } from "@/lib/utils";
-import { Product, ProductWithCategory } from "@/types";
+import { ProductWithCategory } from "@/types";
 
 interface ProductsPageProps {
   // Display configuration
@@ -40,7 +41,7 @@ interface ProductsPageProps {
 export default function ProductsPage({
   title = "منتجاتنا",
   titleHighlight = "المميزة",
-  description = "اكتشف اختيارنا المنتقى من الأزياء الرجالية الفاخرة",
+  description = "اكتشف مجموعتنا من العجل وقطع الغيار والإكسسوارات",
   showSearch = false,
   showViewAllButton = true,
   viewAllText = "عرض كل المنتجات",
@@ -58,6 +59,12 @@ export default function ProductsPage({
   const [isLoading, setIsLoading] = useState(initialLoading);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const gridClassName =
+    gridCols.desktop === 4
+      ? "grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
+      : gridCols.desktop === 3
+        ? "grid grid-cols-1 md:grid-cols-3 gap-5"
+        : "grid grid-cols-1 md:grid-cols-2 gap-5";
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -119,14 +126,14 @@ export default function ProductsPage({
             </div>
           )}
           
-          <div className={`grid grid-cols-${gridCols.mobile} md:grid-cols-${gridCols.desktop} gap-8`}>
+          <div className={gridClassName}>
             {Array.from({ length: limit || 8 }).map((_, index) => (
               <div
                 key={index}
-                className="bg-card rounded-xl overflow-hidden shadow-lg"
+                className="bg-card rounded-lg overflow-hidden border border-border shadow-sm"
               >
-                <Skeleton className="h-54 w-full bg-gray-200" />
-                <div className="p-6 space-y-4">
+                <Skeleton className="aspect-[4/3] w-full bg-gray-200" />
+                <div className="p-4 space-y-3">
                   <Skeleton className="h-6 w-3/4 bg-gray-200" />
                   <Skeleton className="h-4 w-full bg-gray-200" />
                   <Skeleton className="h-4 w-5/6 bg-gray-200" />
@@ -149,7 +156,7 @@ export default function ProductsPage({
             <p className="text-red-600 text-lg mb-6">{error}</p>
             <Link
               href={viewAllHref}
-              className="inline-block bg-accent text-accent-foreground px-8 py-3 rounded-xl font-semibold hover:bg-accent/90 transition-colors"
+              className="inline-block bg-primary text-primary-foreground px-8 py-3 rounded-xl font-semibold hover:bg-primary/90 transition-colors"
             >
               {viewAllText}
             </Link>
@@ -163,11 +170,11 @@ export default function ProductsPage({
     <section className={sectionClassName}>
       <div className={containerClassName}>
         {showHeader && (
-          <div className="text-center mb-16 animate-fade-in-up">
-            <h2 className="text-5xl font-bold text-foreground mb-4">
-              {title} <span className="text-accent">{titleHighlight}</span>
+          <div className="text-center mb-12 animate-fade-in-up">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              {title} <span className="text-primary">{titleHighlight}</span>
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
               {description}
             </p>
           </div>
@@ -180,7 +187,7 @@ export default function ProductsPage({
               placeholder="ابحث عن منتج..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full max-w-xl mx-auto block px-6 py-4 rounded-lg border-2 border-border focus:border-accent focus:outline-none text-lg text-right bg-card"
+              className="w-full max-w-xl mx-auto block px-5 py-3 rounded-md border border-border focus:border-primary focus:outline-none text-base text-right bg-card"
             />
           </div>
         )}
@@ -193,7 +200,7 @@ export default function ProductsPage({
             {showViewAllButton && (
               <Link
                 href={viewAllHref}
-                className="inline-block bg-accent text-accent-foreground px-8 py-3 rounded-xl font-semibold hover:bg-accent/90 transition-colors"
+                className="inline-block bg-primary text-primary-foreground px-7 py-3 rounded-md font-semibold hover:bg-primary/90 transition-colors"
               >
                 {viewAllText}
               </Link>
@@ -201,53 +208,53 @@ export default function ProductsPage({
           </div>
         ) : (
           <>
-            <div className={`grid grid-cols-${gridCols.mobile} md:grid-cols-${gridCols.desktop} gap-8`}>
+            <div className={gridClassName}>
               {filteredProducts.map((product, index) => {
                 const image = getFirstImage(product);
 
                 return (
                   <div
                     key={product.id}
-                    className="bg-card rounded-xl overflow-hidden shadow-lg hover:scale-105 transition animate-fade-in-up"
+                    className="bg-card rounded-lg overflow-hidden border border-border shadow-sm hover-lift transition animate-fade-in-up flex flex-col"
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    <div className="h-54 bg-gradient-to-r from-accent to-accent/80">
+                    <div className="aspect-[4/3] bg-secondary border-b border-border">
                       {image ? (
                         <img
                           src={image}
                           alt={product.title}
-                          className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                          className="w-full h-full object-contain p-2"
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <div className="text-6xl">⬛</div>
+                          <Bike className="text-primary" size={48} />
                         </div>
                       )}
                     </div>
 
-                    <div className="p-6 text-right">
-                      <h3 className="text-xl md:text-2xl font-bold text-foreground mb-2">
+                    <div className="p-4 text-right flex flex-col flex-1">
+                      <h3 className="text-base md:text-lg font-bold text-foreground mb-2 leading-snug">
                         {product.title}
                       </h3>
-                      <p className="hidden md:block text-sm text-muted-foreground mb-3">
+                      <p className="text-sm text-muted-foreground mb-4 leading-relaxed line-clamp-2 flex-1">
                         {product.description}
                       </p>
 
                       {product.price_before_discount && (
-                        <p className="text-lg md:text-2xl line-through decoration-3 opacity-40 font-bold text-accent">
-                          {product.price_before_discount.toFixed(2)}
+                        <p className="text-sm line-through opacity-50 font-semibold text-muted-foreground">
+                          {product.price_before_discount.toFixed(2)} ج.م
                         </p>
                       )}
 
                       {product.price && (
-                        <p className="text-xl md:text-3xl font-bold text-accent mb-3">
-                          {product.price.toFixed(2)}
+                        <p className="text-lg md:text-xl font-bold text-primary mb-4">
+                          {product.price.toFixed(2)} ج.م
                         </p>
                       )}
 
                       <Button
                         onClick={() => router.push(`/products/${product.id}`)}
-                        className="w-full bg-accent text-accent-foreground py-3 rounded-lg hover:bg-accent/90 transition-colors"
+                        className="w-full bg-primary text-primary-foreground py-3 rounded-md hover:bg-primary/90 transition-colors"
                       >
                         عرض التفاصيل
                       </Button>
@@ -261,7 +268,7 @@ export default function ProductsPage({
               <div className="text-center mt-12">
                 <Link
                   href={viewAllHref}
-                  className="inline-block bg-accent text-accent-foreground px-8 py-3 rounded-xl font-semibold hover:bg-accent/90 transition-colors"
+                  className="inline-block bg-primary text-primary-foreground px-7 py-3 rounded-md font-semibold hover:bg-primary/90 transition-colors"
                 >
                   {viewAllText}
                 </Link>

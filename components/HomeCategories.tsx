@@ -34,9 +34,9 @@ export default function HomeCategories() {
             <Skeleton className="h-12 w-1/2 mx-auto mb-4 bg-gray-200" />
             <Skeleton className="h-4 w-3/4 mx-auto bg-gray-200" />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {[1, 2, 3, 4].map((index) => (
-              <div key={index} className="bg-card p-8 rounded-xl shadow-lg">
+              <div key={index} className="bg-card p-6 rounded-lg border border-border shadow-sm">
                 <Skeleton className="h-12 w-12 mb-4 bg-gray-200 rounded" />
                 <Skeleton className="h-6 w-3/4 mb-3 bg-gray-200" />
                 <Skeleton className="h-4 w-full mb-4 bg-gray-200" />
@@ -52,13 +52,13 @@ export default function HomeCategories() {
   return (
     <section id="categories" className="py-20 px-4 bg-secondary">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16 animate-fade-in-up">
-          <h2 className="text-5xl font-bold text-foreground mb-4">
-            أقسامنا <span className="text-accent">الرياضية</span>
+        <div className="text-center mb-12 animate-fade-in-up">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            أقسام <span className="text-primary">أولاد مأمون</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            اكتشف مجموعاتنا الرياضية المصنفة حسب النشاط والاستخدام
-          </p>
+          {/* <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+            تصفح العجل وقطع الغيار والإكسسوارات بطريقة واضحة وسريعة.
+          </p> */}
         </div>
 
         {categories.length === 0 ? (
@@ -68,36 +68,36 @@ export default function HomeCategories() {
             </p>
             <Link
               href="/products"
-              className="inline-block bg-accent text-accent-foreground px-8 py-3 rounded-xl font-semibold hover:bg-accent/90 transition-colors"
+              className="inline-block bg-primary text-primary-foreground px-8 py-3 rounded-xl font-semibold hover:bg-primary/90 transition-colors"
             >
               عرض جميع المنتجات
             </Link>
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-2 md:grid-cols-2 gap-8">
-              {categories.map((category, index) => (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {categories.slice(0, 3).map((category, index) => (
                 <Link
                   key={category.id}
                   href={`/categories/${category.id}`}
                   className="group"
                 >
                   <div
-                    className="bg-card p-8 rounded-xl shadow-lg hover-lift animate-fade-in-up transition-all duration-300 hover:scale-105 cursor-pointer"
+                    className="bg-card p-6 rounded-lg border border-border shadow-sm hover-lift animate-fade-in-up transition-all duration-300 cursor-pointer h-full"
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    <div className="text-5xl mb-4 group-hover:scale-110 transition-transform">
-                      {category.icon || "📦"}
+                    <div className="w-12 h-12 rounded-md bg-secondary border border-border flex items-center justify-center mb-5 group-hover:border-primary transition-colors">
+                      <span className="text-2xl">{category.icon || "🚲"}</span>
                     </div>
-                    <h3 className="text-2xl font-bold text-foreground mb-3 group-hover:text-accent transition-colors">
+                    <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
                       {category.name}
                     </h3>
-                    <p className="hidden md:block text-sm text-muted-foreground leading-relaxed mb-4">
+                    {/* <p className="text-sm text-muted-foreground leading-relaxed mb-5">
                       استكشف منتجات قسم {category.name}
-                    </p>
-                    <div className="md:flex items-center justify-between">
-                      <div className="w-12 h-1 bg-accent rounded-full"></div>
-                      <span className="text-accent font-medium text-sm group-hover:translate-x-2 transition-transform">
+                    </p> */}
+                    <div className="flex items-center justify-between">
+                      <div className="w-10 h-1 bg-primary rounded-full"></div>
+                      <span className="text-primary font-medium text-sm">
                         عرض المنتجات ←
                       </span>
                     </div>
@@ -110,7 +110,7 @@ export default function HomeCategories() {
             <div className="text-center mt-12">
               <Link
                 href="/categories"
-                className="inline-block bg-accent text-accent-foreground px-8 py-3 rounded-xl font-semibold hover:bg-accent/90 transition-colors"
+                className="inline-block bg-primary text-primary-foreground px-7 py-3 rounded-md font-semibold hover:bg-primary/90 transition-colors"
               >
                 عرض كل الأقسام
               </Link>

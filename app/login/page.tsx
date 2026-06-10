@@ -48,7 +48,7 @@ export default function LoginPage() {
           <div className="text-sm text-muted-foreground">EN</div>
           <h1 className="text-2xl font-bold">تسجيل دخول المسؤول</h1>
           <p className="text-sm text-muted-foreground">
-            لوحة التحكم - Sakr Sports ملابس رياضية
+            لوحة التحكم - أولاد مأمون
           </p>
         </div>
 

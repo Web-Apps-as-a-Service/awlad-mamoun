@@ -5,9 +5,9 @@ import ProductsPage from "./ProductsPage";
 export default function Products() {
   return (
     <ProductsPage
-      title="بعض"
-      titleHighlight="منتجاتنا المميزة"
-      description="اكتشف اختيارنا المنتقى من الأزياء الرجالية الفاخرة"
+      title="اختيارات من"
+      titleHighlight="المعرض"
+      description="نماذج من العجل وقطع الغيار والإكسسوارات المتاحة لدى أولاد مأمون"
       limit={4}
       gridCols={{ mobile: 2, desktop: 4 }}
       showSearch={false}

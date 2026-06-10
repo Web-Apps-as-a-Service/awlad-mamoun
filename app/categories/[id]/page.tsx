@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { Bike } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Category } from "@/types";
 import ProductsPage from "@/components/ProductsPage";
-import { getFirstImage } from "@/lib/utils";
 
 export default function CategoryDetailsPage() {
   const params = useParams();
@@ -113,16 +113,18 @@ export default function CategoryDetailsPage() {
           <div className="text-center mb-16">
             <button
               onClick={() => router.push("/categories")}
-              className="text-accent hover:text-accent/80 mb-4 text-sm font-medium"
+              className="text-primary hover:text-primary/80 mb-4 text-sm font-medium"
             >
               ← العودة للأقسام
             </button>
-            <div className="text-8xl mb-6">{category.icon || "📦"}</div>
-            <h1 className="text-5xl font-bold text-foreground mb-4">
-              {category.name}
+            <div className="w-16 h-16 mx-auto rounded-md bg-secondary border border-border flex items-center justify-center mb-6">
+              <Bike className="text-primary" size={34} />
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              منتجات القسم
             </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              استكشف منتجات قسم {category.name}
+            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+              استكشف المنتجات المتاحة واختر ما يناسب استخدامك.
             </p>
           </div>
 

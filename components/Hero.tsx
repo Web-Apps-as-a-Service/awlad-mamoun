@@ -1,47 +1,73 @@
+import { Bike, ShieldCheck, ShoppingBag, Wrench } from "lucide-react";
+
 export default function Hero() {
+  const features = [
+    { icon: Bike, label: "عجل لكل الاستخدامات" },
+    { icon: Wrench, label: "قطع غيار موثوقة" },
+    { icon: ShoppingBag, label: "إكسسوارات عملية" },
+  ];
+
   return (
-    <section id="hero" className="min-h-[300px] md:min-h-[600px] relative pt-20 pb-16 px-4 overflow-hidden">
-      {/* Background gradient only */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-background/95 to-secondary/90" />
-      
-      {/* Content */}
-      <div className="relative z-10 max-w-6xl mx-auto">
-        <div className="text-center space-y-8 animate-fade-in-up">
-          <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight">
-            ملابس رياضية احترافية
-            <br />
-            <span className="text-accent">من Sakr Sports</span>
-          </h1>
+    <section id="hero" className="bg-background px-4 py-14 md:py-20">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-10 items-center">
+        <div className="space-y-7 animate-fade-in-up">
+          <div className="inline-flex items-center gap-2 rounded-md border border-border bg-secondary px-4 py-2 text-sm font-semibold text-primary">
+            <ShieldCheck size={18} />
+            خليك في المضمون مع أولاد مأمون
+          </div>
 
-          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            اكتشف مجموعتنا الحصرية من الملابس الرياضية الاحترافية. الجودة العالية تلبي أداء استثنائي للرياضيين المميزين.
-          </p>
+          <div className="space-y-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-tight">
+              عجل وقطع غيار وإكسسوارات
+            </h1>
+            <p className="text-2xl md:text-3xl font-bold text-primary">
+              من أولاد مأمون
+            </p>
+            <p className="text-base md:text-lg text-muted-foreground max-w-2xl leading-relaxed">
+              كل ما يخص العجل وقطع الغيار والإكسسوارات في مكان واحد.
+            </p>
+          </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
-            <a href="#products" className="bg-accent text-accent-foreground px-8 py-3 rounded-lg hover:bg-accent/90 transition-colors font-semibold text-lg hover-lift">
-              تسوق المجموعة
+          <div className="flex flex-col sm:flex-row gap-3">
+            <a href="#products" className="bg-primary text-primary-foreground px-7 py-3 rounded-md hover:bg-primary/90 transition-colors font-semibold text-center">
+              عرض المنتجات
             </a>
-            <a href="#about" className="border-2 border-accent text-accent px-8 py-3 rounded-lg hover:bg-accent/10 transition-colors font-semibold text-lg hover-lift">
-              اعرف المزيد
+            <a href="#categories" className="border border-primary text-primary px-7 py-3 rounded-md hover:bg-secondary transition-colors font-semibold text-center">
+              تصفح الأقسام
             </a>
           </div>
         </div>
 
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            { icon: '🏃', label: 'أداء رياضي فائق', delay: '0s' },
-            { icon: '�', label: 'جودة احترافية', delay: '0.2s' },
-            { icon: '🏆', label: 'علامة تجارية موثوقة', delay: '0.4s' },
-          ].map((stat, index) => (
-            <div
-              key={index}
-              className="bg-card p-6 rounded-xl shadow-lg text-center hover-lift animate-scale-in"
-              style={{ animationDelay: stat.delay }}
-            >
-              <div className="text-4xl mb-3">{stat.icon}</div>
-              <p className="text-foreground font-semibold">{stat.label}</p>
+        <div className="animate-scale-in">
+          <div className="rounded-lg border border-border bg-secondary p-5 shadow-sm">
+            <div className="aspect-[4/3] rounded-md bg-background border border-border flex items-center justify-center">
+              <div className="text-center space-y-4">
+                <img
+                  src="/logo.jpg"
+                  alt="أولاد مأمون"
+                  className="mx-auto h-28 w-auto object-contain"
+                />
+                <div>
+                  <p className="text-xl font-bold text-foreground">أولاد مأمون</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    عجل، قطع غيار، وإكسسوارات
+                  </p>
+                </div>
+              </div>
             </div>
-          ))}
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
+              {features.map((feature) => {
+                const Icon = feature.icon;
+                return (
+                  <div key={feature.label} className="rounded-md bg-card border border-border p-4 text-center">
+                    <Icon className="mx-auto mb-2 text-primary" size={24} />
+                    <p className="text-sm font-semibold text-foreground">{feature.label}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
     </section>

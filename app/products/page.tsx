@@ -14,7 +14,7 @@ export default function ProductsPageApp() {
         <ProductsPage
           title="جميع"
           titleHighlight="المنتجات"
-          description="اكتشف مجموعتنا الكاملة من الأزياء الرجالية الفاخرة"
+          description="اكتشف مجموعتنا الكاملة من العجل وقطع الغيار والإكسسوارات"
           limit={15}
           gridCols={{ mobile: 2, desktop: 4 }}
           showSearch={true}

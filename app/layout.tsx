@@ -7,9 +7,9 @@ import { Toaster } from "sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Sakr Sports",
+  title: "أولاد مأمون - عجل وقطع غيار الدراجات",
   description:
-    "Sakr Sports - علامة تجارية للملابس الرياضية. نقدم مجموعات منتقاة بعناية تجمع بين الأداء الرياضي والأناقة العصرية للرياضيين المميزين.",
+    "أولاد مأمون - متخصصون في بيع العجل وقطع الغيار والإكسسوارات. خليك في المضمون مع أولاد مأمون. أفضل جودة وأسعار منافسة.",
 };
 
 export default function RootLayout({

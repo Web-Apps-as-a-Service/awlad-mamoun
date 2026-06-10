@@ -6,7 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Bike, ChevronLeft, ChevronRight } from "lucide-react";
 import { Product } from "@/types";
 
 export default function ProductDetailPage() {
@@ -77,11 +77,12 @@ export default function ProductDetailPage() {
     );
   }
 
-  const images = product.image_urls;
+  const images = product.image_urls || [];
+  const hasImages = images.length > 0;
 
   //whats app link for details.
   const openWhatsApp = () => {
-    const phone = "201015185006";
+    const phone = "201277491077";
   
     const message = `السلام عليكم، عايز تفاصيل عن ${product.title} بسعر ${product.price} جنيه 👋
 
@@ -97,25 +98,31 @@ export default function ProductDetailPage() {
     <div className="min-h-screen bg-background text-foreground text-right">
       <Header />
 
-      <section className="py-20 px-4">
+      <section className="py-14 md:py-20 px-4">
         <div className="max-w-6xl mx-auto">
           {/* Back */}
           <button
             onClick={() => router.push("/products")}
-            className="mb-8 text-accent font-semibold"
+            className="mb-8 text-primary font-semibold"
           >
             ← العودة للمنتجات
           </button>
 
-          <div className="grid grid-cols-1 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-10 items-start">
             {/* Images */}
             <div className="flex flex-col gap-4">
-              <div className="relative h-[500px] rounded-xl bg-gradient-to-r from-accent to-accent/80 overflow-hidden">
-                <img
-                  src={images[activeImage]}
-                  alt={product.title}
-                  className="w-full h-full object-contain"
-                />
+              <div className="relative h-[360px] md:h-[500px] rounded-lg bg-secondary border border-border overflow-hidden">
+                {hasImages ? (
+                  <img
+                    src={images[activeImage]}
+                    alt={product.title}
+                    className="w-full h-full object-contain p-3"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <Bike className="text-primary" size={72} />
+                  </div>
+                )}
 
                 {images.length > 1 && (
                   <>
@@ -125,7 +132,7 @@ export default function ProductDetailPage() {
                           i === 0 ? images.length - 1 : i - 1
                         )
                       }
-                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-card/80 p-2 rounded-full"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-card/90 p-2 rounded-full border border-border"
                     >
                       <ChevronRight />
                     </button>
@@ -136,12 +143,12 @@ export default function ProductDetailPage() {
                           i === images.length - 1 ? 0 : i + 1
                         )
                       }
-                      className="absolute left-4 top-1/2 -translate-y-1/2 bg-card/80 p-2 rounded-full"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 bg-card/90 p-2 rounded-full border border-border"
                     >
                       <ChevronLeft />
                     </button>
 
-                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-foreground/80 text-background px-3 py-1 rounded-full text-sm">
+                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-foreground/80 text-background px-3 py-1 rounded-md text-sm">
                       {activeImage + 1} / {images.length}
                     </div>
                   </>
@@ -156,7 +163,7 @@ export default function ProductDetailPage() {
                       onClick={() => setActiveImage(i)}
                       className={`w-20 h-20 rounded-lg overflow-hidden border-2 ${
                         i === activeImage
-                          ? "border-accent"
+                          ? "border-primary"
                           : "border-border"
                       }`}
                     >
@@ -172,17 +179,17 @@ export default function ProductDetailPage() {
             </div>
 
             {/* Info */}
-            <div className="text-right">
-              <h1 className="text-5xl font-bold mb-6">{product.title}</h1>
+            <div className="text-right bg-card border border-border rounded-lg p-6 shadow-sm">
+              <h1 className="text-3xl md:text-4xl font-bold mb-5 leading-tight">{product.title}</h1>
 
              {product.price_before_discount  && (
-              <p className="text-2xl font-bold line-through decoration-3 text-accent opacity-40 mb-4">
+              <p className="text-lg font-bold line-through decoration-2 text-muted-foreground opacity-60 mb-2">
                 {product.price_before_discount.toFixed(2)} ج.م
               </p>
               )}
 
               {product.price  && (
-              <p className="text-4xl font-bold text-accent mb-8">
+              <p className="text-3xl font-bold text-primary mb-8">
                 {product.price.toFixed(2)} ج.م
               </p>
               )}
@@ -202,7 +209,7 @@ export default function ProductDetailPage() {
                   <ul className="space-y-2">
                     {product.specs.map((s: any, i: any) => (
                       <li key={i} className="flex items-center gap-2">
-                        <span className="w-2 h-2 bg-accent rounded-full" />
+                        <span className="w-2 h-2 bg-primary rounded-full" />
                         <span>{s}</span>
                       </li>
                     ))}
@@ -212,7 +219,7 @@ export default function ProductDetailPage() {
 
              <button
                onClick={openWhatsApp}
-               className="block w-full bg-accent text-accent-foreground py-4 rounded-lg text-lg text-center hover:bg-accent/90 transition-colors"
+               className="block w-full bg-primary text-primary-foreground py-4 rounded-md text-lg text-center hover:bg-primary/90 transition-colors"
              >
                استفسر الآن
              </button>

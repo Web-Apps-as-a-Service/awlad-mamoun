@@ -17,8 +17,8 @@ export default function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-background shadow-md animate-fade-in-down">
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <header className="sticky top-0 z-50 bg-background/95 border-b border-border shadow-sm animate-fade-in-down">
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-3">
             <Link
@@ -26,13 +26,13 @@ export default function Header() {
               className="flex items-center gap-3 hover:opacity-80 transition-opacity"
             >
               <img 
-                src="/Sakr-logo.jpg" 
-                alt="Sakr Sports Logo" 
-                className="h-10 w-auto"
+                src="/logo.jpg" 
+                alt="Awlad Mamoun Logo" 
+                className="h-14 w-auto rounded-md"
               />
-              {/* <span className="text-2xl font-extrabold text-foreground">
-                Sakr Sports
-              </span> */}
+              <span className="text-lg sm:text-1xl md:text-2xl font-extrabold whitespace-nowrap" style={{ color: '#A87C00' }}>
+                أولاد مأمون
+              </span>
             </Link>
           </div>
 
@@ -46,37 +46,25 @@ export default function Header() {
           <div
             className={`${
               isOpen ? "flex" : "hidden"
-            } md:flex flex-col md:flex-row gap-8 absolute md:relative top-full md:top-auto right-0 md:right-auto left-0 md:left-auto bg-background md:bg-transparent p-4 md:p-0 md:items-center shadow-md md:shadow-none`}
+            } md:flex flex-col md:flex-row gap-6 absolute md:relative top-full md:top-auto right-0 md:right-auto left-0 md:left-auto bg-background md:bg-transparent p-4 md:p-0 md:items-center shadow-md md:shadow-none border-b md:border-b-0 border-border`}
           >
             {navItems.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
-                className="text-foreground hover:text-accent transition-colors font-medium"
+                className="text-foreground hover:text-primary transition-colors font-medium"
                 onClick={() => setIsOpen(false)}
               >
                 {item.label}
               </Link>
             ))}
-            {/* <Link
-              href="/login"
-              className="text-foreground hover:text-accent transition-colors font-medium md:hidden"
-              onClick={() => setIsOpen(false)}
-            >
-              لوحة التحكم
-            </Link> */}
+          
           </div>
 
           <div className="hidden md:flex gap-4">
-            {/* <Link
-              href="/login"
-              className="text-foreground hover:text-accent transition-colors font-medium"
-            >
-              لوحة التحكم
-            </Link> */}
             <a
               href="/#products"
-              className="bg-accent text-accent-foreground px-6 py-2 rounded-lg hover:bg-accent/90 transition-colors font-semibold"
+              className="bg-primary text-primary-foreground px-5 py-2 rounded-md hover:bg-primary/90 transition-colors font-semibold"
             >
               تسوق الآن
             </a>
@@ -86,3 +74,4 @@ export default function Header() {
     </header>
   );
 }
+

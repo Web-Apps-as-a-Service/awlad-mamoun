@@ -317,7 +317,7 @@ export default function ProductForm({
                       <Input
                         {...field}
                         className="h-11 text-base"
-                        placeholder="مثال: ترنج رياضي  "
+                        placeholder="مثال: عجلة مقاس 26"
                       />
                     </FormControl>
                     <FormMessage />

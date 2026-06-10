@@ -85,7 +85,7 @@ export default function CategoryForm({
                     <Input
                       {...field}
                       className="h-11 text-base"
-                      placeholder="مثال: ملابس رياضية"
+                      placeholder="مثال: قطع غيار"
                     />
                   </FormControl>
                   <FormMessage />
@@ -105,7 +105,7 @@ export default function CategoryForm({
                     <Input
                       {...field}
                       className="h-11 text-base"
-                      placeholder="مثال: 🏃‍♂️ أو 👕 أو 🏀"
+                      placeholder="مثال: 🚲 أو 🔧 أو 🛍️"
                     />
                   </FormControl>
                   <FormMessage />
