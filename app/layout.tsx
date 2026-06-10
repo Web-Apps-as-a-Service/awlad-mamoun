@@ -10,6 +10,9 @@ export const metadata: Metadata = {
   title: "أولاد مأمون - عجل وقطع غيار الدراجات",
   description:
     "أولاد مأمون - متخصصون في بيع العجل وقطع الغيار والإكسسوارات. خليك في المضمون مع أولاد مأمون. أفضل جودة وأسعار منافسة.",
+  icons: {
+    icon: "/logo.jpg",
+  },
 };
 
 export default function RootLayout({

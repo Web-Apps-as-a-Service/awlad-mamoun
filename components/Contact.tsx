@@ -153,16 +153,15 @@ export default function Contact() {
               </div> */}
               <div>
                 <p className="font-semibold text-foreground mb-2">العنوان</p>
-                <p className="text-foreground">أجهور الكبرى, مركز طوخ, القليوبية</p>
+                <p className="text-foreground">قها طريق مصر اسكندريه الزراعي بجوار بنك مصر</p>
               </div>
               <div>
                 <p className="font-semibold text-foreground mb-2">ساعات العمل</p>
                 <p className="text-foreground">
-                  من السبت إلى الخميس: 8:00 - 22:00
+            يوميا ماعدا الأحد من الساعة 12 ظهراً حتى 12 منتصف الليل
+                
                 </p>
-                <p className="text-foreground">
-                  الجمعة: 2:00 - 22:00
-                </p>
+            
               </div>
             </div>
           </div>
