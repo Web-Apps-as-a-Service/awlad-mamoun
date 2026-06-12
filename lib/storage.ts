@@ -251,3 +251,145 @@ export async function getProductsByCategory(categoryId: string) {
   if (error) throw error;
   return data;
 }
+
+/* -------------------- Filtered and Paginated Products -------------------- */
+export async function getFilteredAndPaginatedProducts(params: {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  categoryId?: string;
+  brand?: string;
+  productType?: string;
+  productSize?: string;
+  isAvailable?: boolean;
+}) {
+  const supabase = getServerClient();
+  const {
+    page = 1,
+    pageSize = 20,
+    search,
+    categoryId,
+    brand,
+    productType,
+    productSize,
+    isAvailable,
+  } = params;
+
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+
+  let query = supabase
+    .from("products")
+    .select(
+      `
+      *,
+      categories (
+        id,
+        name
+      )
+    `,
+      { count: "exact" }
+    )
+    .eq("app_id", APP_ID);
+
+  // Apply filters
+  if (search) {
+    query = query.or(`title.ilike.%${search}%,brand.ilike.%${search}%`);
+  }
+
+  if (categoryId) {
+    query = query.eq("category_id", categoryId);
+  }
+
+  if (brand) {
+    query = query.eq("brand", brand);
+  }
+
+  if (productType) {
+    query = query.eq("product_type", productType);
+  }
+
+  if (productSize) {
+    query = query.eq("product_size", productSize);
+  }
+
+  if (isAvailable !== undefined) {
+    query = query.eq("is_available", isAvailable);
+  }
+
+  const { data, error, count } = await query
+    .order("created_at", { ascending: false })
+    .range(from, to);
+
+  if (error) throw error;
+
+  return {
+    products: data || [],
+    total: count || 0,
+    page,
+    pageSize,
+    totalPages: Math.ceil((count || 0) / pageSize),
+  };
+}
+
+/* -------------------- Filter Values -------------------- */
+export async function getProductFilterValues() {
+  const supabase = getServerClient();
+
+  // Get unique brands
+  const { data: brandsData, error: brandsError } = await supabase
+    .from("products")
+    .select("brand")
+    .not("brand", "is", null)
+    .eq("app_id", APP_ID);
+
+  if (brandsError) throw brandsError;
+
+  const brands = [
+    ...new Set(
+      brandsData
+        .map((p) => p.brand)
+        .filter((b): b is string => b !== null && b !== undefined)
+    ),
+  ].sort();
+
+  // Get unique product types
+  const { data: typesData, error: typesError } = await supabase
+    .from("products")
+    .select("product_type")
+    .not("product_type", "is", null)
+    .eq("app_id", APP_ID);
+
+  if (typesError) throw typesError;
+
+  const productTypes = [
+    ...new Set(
+      typesData
+        .map((p) => p.product_type)
+        .filter((t): t is string => t !== null && t !== undefined)
+    ),
+  ].sort();
+
+  // Get unique product sizes
+  const { data: sizesData, error: sizesError } = await supabase
+    .from("products")
+    .select("product_size")
+    .not("product_size", "is", null)
+    .eq("app_id", APP_ID);
+
+  if (sizesError) throw sizesError;
+
+  const productSizes = [
+    ...new Set(
+      sizesData
+        .map((p) => p.product_size)
+        .filter((s): s is string => s !== null && s !== undefined)
+    ),
+  ].sort();
+
+  return {
+    brands,
+    productTypes,
+    productSizes,
+  };
+}

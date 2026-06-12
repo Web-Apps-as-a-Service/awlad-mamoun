@@ -22,7 +22,6 @@ import { Category } from "@/types";
 
 const formSchema = z.object({
   name: z.string().min(2, "اسم القسم مطلوب"),
-  icon: z.string().min(1, "أيقونة القسم مطلوبة"),
 });
 
 type CategoryFormData = z.infer<typeof formSchema>;
@@ -43,11 +42,9 @@ export default function CategoryForm({
     defaultValues: initialData
       ? {
           name: initialData.name,
-          icon: initialData.icon || "",
         }
       : {
           name: "",
-          icon: "",
         },
   });
 
@@ -86,26 +83,6 @@ export default function CategoryForm({
                       {...field}
                       className="h-11 text-base"
                       placeholder="مثال: قطع غيار"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="icon"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-semibold text-foreground">
-                    أيقونة القسم
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      className="h-11 text-base"
-                      placeholder="مثال: 🚲 أو 🔧 أو 🛍️"
                     />
                   </FormControl>
                   <FormMessage />

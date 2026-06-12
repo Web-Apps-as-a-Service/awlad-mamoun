@@ -30,19 +30,39 @@ export default function Dashboard() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchInput, setSearchInput] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [total, setTotal] = useState(0);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<Product | null>(null);
 
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (page: number = 1) => {
     try {
       setLoading(true);
-      const res = await fetch("/api/products");
+      const params = new URLSearchParams();
+      params.append("page", page.toString());
+      params.append("page_size", "20");
+
+      if (selectedCategory !== "all") {
+        params.append("category_id", selectedCategory);
+      }
+
+      if (searchQuery) {
+        params.append("search", searchQuery);
+      }
+
+      const res = await fetch(`/api/products?${params.toString()}`);
       if (!res.ok) throw new Error();
-      setProducts(await res.json());
+      const data = await res.json();
+      setProducts(data.products || []);
+      setTotalPages(data.totalPages || 1);
+      setTotal(data.total || 0);
+      setCurrentPage(data.page || 1);
     } catch {
       toast.error("فشل تحميل المنتجات");
     } finally {
@@ -61,32 +81,47 @@ export default function Dashboard() {
     }
   };
 
+  const handleSearch = () => {
+    setSearchQuery(searchInput);
+    setCurrentPage(1);
+    fetchProducts(1);
+  };
+
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
   useEffect(() => {
     fetchProducts();
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    setSearchInput(searchQuery);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+    fetchProducts(1);
+  }, [searchQuery, selectedCategory]);
+
+  useEffect(() => {
+    fetchProducts(currentPage);
+  }, [currentPage]);
 
   const handleDelete = async (id: string) => {
     const res = await fetch(`/api/products?id=${id}`, {
       method: "DELETE",
     });
     if (res.ok) {
-      setProducts((p) => p.filter((x) => x.id !== id));
       toast.success("تم الحذف بنجاح");
+      fetchProducts(currentPage);
     }
   };
 
-  const filtered = products.filter((p) => {
-    const matchesSearch =
-      searchQuery === "" ||
-      p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (p.brand && p.brand.toLowerCase().includes(searchQuery.toLowerCase()));
 
-    const matchesCategory =
-      selectedCategory === "all" || p.category_id === selectedCategory;
-
-    return matchesSearch && matchesCategory;
-  });
 
   return (
     <div className="min-h-screen bg-background text-foreground text-right">
@@ -105,10 +140,15 @@ export default function Dashboard() {
               <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 placeholder="بحث بالاسم أو الماركة..."
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                onKeyDown={handleSearchKeyDown}
                 className="pr-10 h-10 border border-border rounded-lg px-3 w-full sm:w-64 bg-card"
-                onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
+            <Button onClick={handleSearch} className="w-full sm:w-auto">
+              بحث
+            </Button>
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
               <SelectTrigger className="w-full sm:w-48 h-10">
                 <SelectValue placeholder="تصفية حسب القسم" />
@@ -142,13 +182,13 @@ export default function Dashboard() {
               <div className="p-8 text-center">
                 <p>جاري التحميل...</p>
               </div>
-            ) : filtered.length === 0 ? (
+            ) : products.length === 0 ? (
               <div className="p-8 text-center">
                 <p className="text-muted-foreground">لا توجد منتجات مطابقة</p>
               </div>
             ) : (
               <div className="divide-y divide-border">
-                {filtered.map((product) => {
+                {products.map((product) => {
                   const image = getFirstImage(product);
                   return (
                     <div key={product.id} className="p-4 space-y-3">
@@ -253,14 +293,14 @@ export default function Dashboard() {
                       جاري التحميل...
                     </td>
                   </tr>
-                ) : filtered.length === 0 ? (
+                ) : products.length === 0 ? (
                   <tr>
                     <td colSpan={6} className="p-8 text-center">
                       لا توجد منتجات مطابقة
                     </td>
                   </tr>
                 ) : (
-                  filtered.map((product) => {
+                  products.map((product) => {
                     const image = getFirstImage(product);
 
                     return (
@@ -352,6 +392,62 @@ export default function Dashboard() {
           </div>
         </Card>
 
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between mt-4 px-2">
+            <div className="text-sm text-muted-foreground">
+              صفحة {currentPage} من {totalPages} ({total} منتج)
+            </div>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+              >
+                السابق
+              </Button>
+              <div className="flex gap-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1)
+                  .filter(
+                    (page) =>
+                      page === 1 ||
+                      page === totalPages ||
+                      (page >= currentPage - 1 && page <= currentPage + 1)
+                  )
+                  .map((page, index, array) => {
+                    const prevPage = array[index - 1];
+                    const showEllipsis = prevPage && page - prevPage > 1;
+
+                    return (
+                      <div key={page} className="flex items-center">
+                        {showEllipsis && (
+                          <span className="px-2 text-muted-foreground">...</span>
+                        )}
+                        <Button
+                          variant={currentPage === page ? "default" : "outline"}
+                          size="sm"
+                          className="min-w-[2.5rem]"
+                          onClick={() => setCurrentPage(page)}
+                        >
+                          {page}
+                        </Button>
+                      </div>
+                    );
+                  })}
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+              >
+                التالي
+              </Button>
+            </div>
+          </div>
+        )}
+
         {/* Add product form*/}
         <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
           <DialogContent className="max-h-[90vh] overflow-y-auto w-[95vw] sm:w-full">
@@ -374,7 +470,8 @@ export default function Dashboard() {
                   }
                   toast.success("تم إضافة المنتج بنجاح");
                   setIsAddOpen(false);
-                  fetchProducts();
+                  setCurrentPage(1);
+                  fetchProducts(1);
                 } catch (error) {
                   console.error("Add product error:", error);
                   toast.error("حدث خطأ ما");
@@ -413,7 +510,7 @@ export default function Dashboard() {
                     toast.success("تم تعديل المنتج بنجاح");
                     setIsEditOpen(false);
                     setEditingProduct(null);
-                    fetchProducts();
+                    fetchProducts(currentPage);
                   } catch (error) {
                     console.error("Edit product error:", error);
                     toast.error("حدث خطأ ما");

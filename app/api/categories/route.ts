@@ -47,14 +47,10 @@ export async function POST(request: NextRequest) {
     if (!data.name || typeof data.name !== "string") {
       return NextResponse.json({ error: "Category name is required" }, { status: 400 });
     }
-    if (!data.icon || typeof data.icon !== "string") {
-      return NextResponse.json({ error: "Category icon is required" }, { status: 400 });
-    }
 
     // -------- Normalize payload --------
     const categoryData = {
       name: data.name,
-      icon: data.icon,
     };
 
     const category = await addCategory(categoryData);
@@ -92,7 +88,6 @@ export async function PUT(request: NextRequest) {
 
     const updated = await updateCategory(id, {
       name: data.name,
-      icon: data.icon,
     });
 
     if (!updated) {

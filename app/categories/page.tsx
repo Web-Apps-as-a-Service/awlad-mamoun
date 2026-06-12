@@ -100,9 +100,6 @@ export default function CategoriesPage() {
                     className="bg-card p-6 rounded-lg border border-border shadow-sm hover-lift animate-fade-in-up transition-all duration-300 cursor-pointer h-full"
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    <div className="w-12 h-12 rounded-md bg-secondary border border-border flex items-center justify-center mb-5 group-hover:border-primary transition-colors">
-                      <span className="text-2xl">{category.icon || "🚲"}</span>
-                    </div>
                     <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
                       {category.name}
                     </h3>

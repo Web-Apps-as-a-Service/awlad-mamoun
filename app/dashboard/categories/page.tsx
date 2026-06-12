@@ -124,8 +124,8 @@ export default function CategoriesDashboard() {
                 filtered.map((category) => (
                   <tr key={category.id} className="border-b">
                     <td className="p-4 flex items-center gap-3">
-                      <div className="w-12 h-12 rounded bg-secondary overflow-hidden flex items-center justify-center text-2xl">
-                        {category.icon || <Tag className="w-6 h-6 text-muted-foreground" />}
+                      <div className="w-12 h-12 rounded bg-secondary overflow-hidden flex items-center justify-center">
+                        <Tag className="w-6 h-6 text-muted-foreground" />
                       </div>
                       <div>
                         <div className="font-bold">{category.name}</div>

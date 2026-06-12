@@ -33,15 +33,12 @@ export interface Category {
   title: string;
   id: string;
   name: string;
-  icon: string;
-  // title: string;
   created_at: string;
   updated_at: string;
 }
 
 export interface CategoryInsert {
   name: string;
-  icon: string;
 }
 
 export interface ProductWithCategory extends Product {

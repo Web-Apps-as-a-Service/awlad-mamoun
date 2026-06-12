@@ -6,30 +6,59 @@ import {
   addProduct,
   updateProduct,
   deleteProduct,
+  getFilteredAndPaginatedProducts,
+  getProductFilterValues,
 } from "@/lib/storage";
 
 /**
  * GET /api/products
- * Fetch all products, products by category, or limited products
+ * Fetch products with pagination and filtering
  */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const categoryId = searchParams.get("category_id");
     const limit = searchParams.get("limit");
+    const page = searchParams.get("page");
+    const pageSize = searchParams.get("page_size");
+    const search = searchParams.get("search");
+    const brand = searchParams.get("brand");
+    const productType = searchParams.get("product_type");
+    const productSize = searchParams.get("product_size");
+    const isAvailable = searchParams.get("is_available");
+    const filterValues = searchParams.get("filter_values");
 
-    let products;
-
-    if (categoryId) {
-      products = await getProductsByCategory(categoryId);
-    } else if (limit) {
-      const limitNum = parseInt(limit);
-      products = await getLimitedProducts(limitNum);
-    } else {
-      products = await getProducts();
+    // Return filter values if requested
+    if (filterValues === "true") {
+      const values = await getProductFilterValues();
+      return NextResponse.json(values, { status: 200 });
     }
 
-    return NextResponse.json(products, { status: 200 });
+    // Legacy support for category_id and limit (for backward compatibility)
+    if (categoryId && !page && !search && !brand && !productType && !productSize) {
+      const products = await getProductsByCategory(categoryId);
+      return NextResponse.json(products, { status: 200 });
+    }
+
+    if (limit && !page && !search && !brand && !productType && !productSize) {
+      const limitNum = parseInt(limit);
+      const products = await getLimitedProducts(limitNum);
+      return NextResponse.json(products, { status: 200 });
+    }
+
+    // New paginated and filtered endpoint
+    const result = await getFilteredAndPaginatedProducts({
+      page: page ? parseInt(page) : undefined,
+      pageSize: pageSize ? parseInt(pageSize) : undefined,
+      search: search || undefined,
+      categoryId: categoryId || undefined,
+      brand: brand || undefined,
+      productType: productType || undefined,
+      productSize: productSize || undefined,
+      isAvailable: isAvailable ? isAvailable === "true" : undefined,
+    });
+
+    return NextResponse.json(result, { status: 200 });
   } catch (error) {
     console.error("GET /api/products error:", error);
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
