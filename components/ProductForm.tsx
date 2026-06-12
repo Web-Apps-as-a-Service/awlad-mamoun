@@ -9,6 +9,7 @@ import { Plus, Trash2, Upload, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
@@ -41,6 +42,10 @@ const formSchema = z.object({
   specs: z
     .array(z.object({ value: z.string() }))
     .min(1, "أضف ميزة واحدة على الأقل"),
+  brand: z.string().optional(),
+  product_type: z.string().optional(),
+  product_size: z.string().optional(),
+  is_available: z.boolean(),
 });
 
 type ProductFormData = z.infer<typeof formSchema>;
@@ -121,6 +126,10 @@ export default function ProductForm({
             ? initialData.specs.map((s: string) => ({ value: s }))
             : [{ value: "" }],
           category_id: initialData.category_id || "none",
+          brand: initialData.brand || "",
+          product_type: initialData.product_type || "",
+          product_size: initialData.product_size || "",
+          is_available: initialData.is_available ?? true,
         }
       : {
           title: "",
@@ -129,6 +138,10 @@ export default function ProductForm({
           price_before_discount: "",
           category_id: "none",
           specs: [{ value: "" }],
+          brand: "",
+          product_type: "",
+          product_size: "",
+          is_available: true,
         },
   });
 
@@ -194,6 +207,11 @@ export default function ProductForm({
         // Convert empty price strings to null, valid numbers to number
         price: values.price && values.price.trim() !== "" ? Number(values.price) : null,
         price_before_discount: values.price_before_discount && values.price_before_discount.trim() !== "" ? Number(values.price_before_discount) : null,
+        // Handle optional fields
+        brand: values.brand && values.brand.trim() !== "" ? values.brand : null,
+        product_type: values.product_type && values.product_type.trim() !== "" ? values.product_type : null,
+        product_size: values.product_size && values.product_size.trim() !== "" ? values.product_size : null,
+        is_available: values.is_available,
       };
 
       await onSubmit(formattedData);
@@ -406,6 +424,86 @@ export default function ProductForm({
                       />
                     </FormControl>
                     <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="brand"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-semibold text-foreground">
+                      الماركة (اختياري)
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        className="h-11 text-base"
+                        placeholder="مثال: Trinx"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="product_type"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-semibold text-foreground">
+                      النوع (اختياري)
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        className="h-11 text-base"
+                        placeholder="مثال: جبلي"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="product_size"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-semibold text-foreground">
+                      المقاس (اختياري)
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        className="h-11 text-base"
+                        placeholder="مثال: 26"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="is_available"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border border-border p-3">
+                    <div className="space-y-0.5">
+                      <FormLabel className="text-sm font-semibold text-foreground">
+                        الحالة
+                      </FormLabel>
+                    </div>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
                   </FormItem>
                 )}
               />

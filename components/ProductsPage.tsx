@@ -252,6 +252,20 @@ export default function ProductsPage({
                         </p>
                       )}
 
+                      {product.is_available !== undefined && (
+                        <div className="mb-4">
+                          <span
+                            className={`inline-block px-2 py-1 rounded-md text-xs font-semibold ${
+                              product.is_available
+                                ? "bg-green-100 text-green-700"
+                                : "bg-red-100 text-red-700"
+                            }`}
+                          >
+                            {product.is_available ? "متوفر" : "غير متوفر"}
+                          </span>
+                        </div>
+                      )}
+
                       <Button
                         onClick={() => router.push(`/products/${product.id}`)}
                         className="w-full bg-primary text-primary-foreground py-3 rounded-md hover:bg-primary/90 transition-colors"

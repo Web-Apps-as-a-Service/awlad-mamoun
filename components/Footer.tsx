@@ -42,7 +42,14 @@ export default function Footer() {
               متخصصون في بيع الدراجات وقطع الغيار والإكسسوارات. خليك في المضمون مع أولاد مأمون.
             </p>
             <p className="mt-3 text-sm text-muted-foreground">
-              تم تصميم وتطوير هذا الموقع بواسطة <b>Mahmoud Fayez</b> و <b>Mahmoud Elabady</b>
+              تم تصميم وتطوير هذا الموقع بواسطة{" "}
+              <a href="https://www.facebook.com/mozyfayez" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-semibold">
+                Mahmoud Fayez
+              </a>{" "}
+              و{" "}
+              <a href="https://www.facebook.com/mahmoud.elabady.199" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-semibold">
+                Mahmoud Elabady
+              </a>
             </p>
           </div>
 
@@ -98,6 +105,8 @@ export default function Footer() {
             </div>
           </div>
         </div>
+
+        
 
         <div className="border-t border-border pt-6">
           <div className="text-center text-muted-foreground text-sm">

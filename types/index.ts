@@ -9,6 +9,10 @@ export interface Product {
   created_at: string;
   updated_at: string;
   category_id?: string | null;
+  brand?: string | null;
+  product_type?: string | null;
+  product_size?: string | null;
+  is_available?: boolean | null;
 }
 
 export interface ProductInsert {
@@ -19,6 +23,10 @@ export interface ProductInsert {
   image_urls: string[];
   specs: string[];
   category_id?: string | null;
+  brand?: string | null;
+  product_type?: string | null;
+  product_size?: string | null;
+  is_available?: boolean | null;
 }
 
 export interface Category {

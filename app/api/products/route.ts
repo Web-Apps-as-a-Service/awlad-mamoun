@@ -73,6 +73,10 @@ export async function POST(request: NextRequest) {
       image_urls: data.image_urls,
       specs: Array.isArray(data.specs) ? data.specs : [],
       category_id: data.category_id || null,
+      brand: data.brand || null,
+      product_type: data.product_type || null,
+      product_size: data.product_size || null,
+      is_available: data.is_available !== undefined ? data.is_available : true,
     };
 
     const product = await addProduct(productData);
@@ -127,6 +131,10 @@ export async function PUT(request: NextRequest) {
       image_urls: data.image_urls,
       specs: Array.isArray(data.specs) ? data.specs : undefined,
       category_id: data.category_id !== undefined ? data.category_id : undefined,
+      brand: data.brand !== undefined ? data.brand : undefined,
+      product_type: data.product_type !== undefined ? data.product_type : undefined,
+      product_size: data.product_size !== undefined ? data.product_size : undefined,
+      is_available: data.is_available !== undefined ? data.is_available : undefined,
     });
 
     if (!updated) {

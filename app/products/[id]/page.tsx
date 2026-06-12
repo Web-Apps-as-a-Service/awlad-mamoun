@@ -84,7 +84,7 @@ export default function ProductDetailPage() {
   const openWhatsApp = () => {
     const phone = "201277491077";
   
-    const message = `السلام عليكم، عايز تفاصيل عن ${product.title} بسعر ${product.price} جنيه 👋
+    const message = `السلام عليكم، عايز تفاصيل عن ${product.title} 👋
 
     ${window.location.href}
     `;
@@ -192,6 +192,37 @@ export default function ProductDetailPage() {
               <p className="text-3xl font-bold text-primary mb-8">
                 {product.price.toFixed(2)} ج.م
               </p>
+              )}
+
+              {/* New Product Fields */}
+              {product.brand && (
+                <div className="mb-2">
+                  <span className="text-sm text-muted-foreground">الماركة: </span>
+                  <span className="font-semibold">{product.brand}</span>
+                </div>
+              )}
+
+              {product.product_type && (
+                <div className="mb-2">
+                  <span className="text-sm text-muted-foreground">النوع: </span>
+                  <span className="font-semibold">{product.product_type}</span>
+                </div>
+              )}
+
+              {product.product_size && (
+                <div className="mb-2">
+                  <span className="text-sm text-muted-foreground">المقاس: </span>
+                  <span className="font-semibold">{product.product_size}</span>
+                </div>
+              )}
+
+              {product.is_available !== undefined && (
+                <div className="mb-6">
+                  <span className="text-sm text-muted-foreground">الحالة: </span>
+                  <span className={`font-semibold ${product.is_available ? "text-green-600" : "text-red-600"}`}>
+                    {product.is_available ? "متوفر" : "غير متوفر"}
+                  </span>
+                </div>
               )}
 
               {product.description && (
