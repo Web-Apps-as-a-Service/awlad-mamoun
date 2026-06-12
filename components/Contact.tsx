@@ -158,8 +158,7 @@ export default function Contact() {
               <div>
                 <p className="font-semibold text-foreground mb-2">ساعات العمل</p>
                 <p className="text-foreground">
-            يوميا ماعدا الأحد من الساعة 12 ظهراً حتى 12 منتصف الليل
-                
+نعمل يوميًا من 12 ظهرًا حتى 12 منتصف الليل، ما عدا يوم الأحد (إجازة).                
                 </p>
             
               </div>

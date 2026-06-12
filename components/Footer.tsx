@@ -41,16 +41,6 @@ export default function Footer() {
             <p className="text-muted-foreground leading-relaxed">
               متخصصون في بيع الدراجات وقطع الغيار والإكسسوارات. خليك في المضمون مع أولاد مأمون.
             </p>
-            <p className="mt-3 text-sm text-muted-foreground">
-              تم تصميم وتطوير هذا الموقع بواسطة{" "}
-              <a href="https://www.facebook.com/mozyfayez" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-semibold">
-                Mahmoud Fayez
-              </a>{" "}
-              و{" "}
-              <a href="https://www.facebook.com/mahmoud.elabady.199" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-semibold">
-                Mahmoud Elabady
-              </a>
-            </p>
           </div>
 
           <div className="animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
@@ -112,6 +102,19 @@ export default function Footer() {
           <div className="text-center text-muted-foreground text-sm">
             <p>© {currentYear} أولاد مأمون - جميع الحقوق محفوظة</p>
           </div>
+        </div>
+
+        <div className="mt-4 text-center">
+          <p className="text-xs text-muted-foreground">
+            تم تصميم وتطوير هذا الموقع بواسطة{" "}
+            <a href="https://www.facebook.com/mozyfayez" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-semibold">
+              Mahmoud Fayez
+            </a>{" "}
+            و{" "}
+            <a href="https://www.facebook.com/mahmoud.elabady.199" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-semibold">
+              Mahmoud Elabady
+            </a>
+          </p>
         </div>
       </div>
     </footer>

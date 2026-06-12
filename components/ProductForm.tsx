@@ -46,6 +46,7 @@ const formSchema = z.object({
   product_type: z.string().optional(),
   product_size: z.string().optional(),
   is_available: z.boolean(),
+  is_featured: z.boolean(),
 });
 
 type ProductFormData = z.infer<typeof formSchema>;
@@ -130,6 +131,7 @@ export default function ProductForm({
           product_type: initialData.product_type || "",
           product_size: initialData.product_size || "",
           is_available: initialData.is_available ?? true,
+          is_featured: initialData.is_featured ?? false,
         }
       : {
           title: "",
@@ -142,6 +144,7 @@ export default function ProductForm({
           product_type: "",
           product_size: "",
           is_available: true,
+          is_featured: false,
         },
   });
 
@@ -212,6 +215,7 @@ export default function ProductForm({
         product_type: values.product_type && values.product_type.trim() !== "" ? values.product_type : null,
         product_size: values.product_size && values.product_size.trim() !== "" ? values.product_size : null,
         is_available: values.is_available,
+        is_featured: values.is_featured,
       };
 
       await onSubmit(formattedData);
@@ -497,12 +501,50 @@ export default function ProductForm({
                       <FormLabel className="text-sm font-semibold text-foreground">
                         الحالة
                       </FormLabel>
+                      <div className="text-xs">
+                        {field.value ? (
+                          <span className="text-green-600 font-medium">متوفر</span>
+                        ) : (
+                          <span className="text-red-600 font-medium">غير متوفر</span>
+                        )}
+                      </div>
                     </div>
                     <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
+                      <div dir="ltr">
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </div>
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="is_featured"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border border-border p-3">
+                    <div className="space-y-0.5">
+                      <FormLabel className="text-sm font-semibold text-foreground">
+                        منتج مميز
+                      </FormLabel>
+                      <div className="text-xs">
+                        {field.value ? (
+                          <span className="text-yellow-600 font-medium">نعم ⭐</span>
+                        ) : (
+                          <span className="text-muted-foreground font-medium">لا</span>
+                        )}
+                      </div>
+                    </div>
+                    <FormControl>
+                      <div dir="ltr">
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </div>
                     </FormControl>
                   </FormItem>
                 )}

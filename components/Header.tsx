@@ -1,38 +1,55 @@
 "use client";
 
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
 
   const navItems = [
-    { label: "الرئيسية", href: "/" },
-    { label: "المنتجات", href: "/products" },
-    { label: "الأقسام", href: "/categories" },
+    { label: "الرئيسية", href: "/", id: "hero" },
+    { label: "المنتجات", href: "/products", id: null },
     // { label: "من نحن", href: "/#about" },
     // { label: "المجموعات", href: "/#services" },
     // { label: "اتصل بنا", href: "/#contact" },
   ];
 
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string, id?: string | null) => {
+    if (pathname === "/" && id) {
+      e.preventDefault();
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+      setIsOpen(false);
+    }
+  };
+
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (pathname === "/") {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   return (
     <header className="sticky top-0 z-50 bg-background/95 border-b border-border shadow-sm animate-fade-in-down">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
         <div className="flex justify-between items-center">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center">
             <Link
               href="/"
-              className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+              onClick={handleLogoClick}
+              className="flex items-center hover:opacity-80 transition-opacity"
             >
-              <img 
-                src="/logo.jpg" 
-                alt="Awlad Mamoun Logo" 
-                className="h-14 w-auto rounded-md"
+              <img
+                src="/logo.jpg"
+                alt="Awlad Mamoun Logo"
+                className="h-11 w-auto rounded-md"
               />
-              <span className="text-lg sm:text-1xl md:text-2xl font-extrabold whitespace-nowrap" style={{ color: '#A87C00' }}>
-                أولاد مأمون
-              </span>
             </Link>
           </div>
 
@@ -52,8 +69,8 @@ export default function Header() {
               <Link
                 key={item.label}
                 href={item.href}
+                onClick={(e) => handleNavClick(e, item.href, item.id)}
                 className="text-foreground hover:text-primary transition-colors font-medium"
-                onClick={() => setIsOpen(false)}
               >
                 {item.label}
               </Link>

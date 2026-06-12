@@ -8,6 +8,8 @@ import {
   deleteProduct,
   getFilteredAndPaginatedProducts,
   getProductFilterValues,
+  getFeaturedProducts,
+  getRelatedProducts,
 } from "@/lib/storage";
 
 /**
@@ -27,11 +29,33 @@ export async function GET(request: NextRequest) {
     const productSize = searchParams.get("product_size");
     const isAvailable = searchParams.get("is_available");
     const filterValues = searchParams.get("filter_values");
+    const featured = searchParams.get("featured");
+    const related = searchParams.get("related");
+    const relatedProductId = searchParams.get("product_id");
+    const relatedCategoryId = searchParams.get("category_id");
+    const relatedBrand = searchParams.get("brand");
 
     // Return filter values if requested
     if (filterValues === "true") {
       const values = await getProductFilterValues();
       return NextResponse.json(values, { status: 200 });
+    }
+
+    // Return featured products if requested
+    if (featured === "true") {
+      const products = await getFeaturedProducts(limit ? parseInt(limit) : 4);
+      return NextResponse.json(products, { status: 200 });
+    }
+
+    // Return related products if requested
+    if (related === "true" && relatedProductId) {
+      const products = await getRelatedProducts(
+        relatedProductId,
+        relatedCategoryId || undefined,
+        relatedBrand || undefined,
+        limit ? parseInt(limit) : 4
+      );
+      return NextResponse.json(products, { status: 200 });
     }
 
     // Legacy support for category_id and limit (for backward compatibility)
@@ -106,6 +130,7 @@ export async function POST(request: NextRequest) {
       product_type: data.product_type || null,
       product_size: data.product_size || null,
       is_available: data.is_available !== undefined ? data.is_available : true,
+      is_featured: data.is_featured !== undefined ? data.is_featured : false,
     };
 
     const product = await addProduct(productData);
@@ -164,6 +189,7 @@ export async function PUT(request: NextRequest) {
       product_type: data.product_type !== undefined ? data.product_type : undefined,
       product_size: data.product_size !== undefined ? data.product_size : undefined,
       is_available: data.is_available !== undefined ? data.is_available : undefined,
+      is_featured: data.is_featured !== undefined ? data.is_featured : undefined,
     });
 
     if (!updated) {

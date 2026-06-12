@@ -8,6 +8,10 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Bike, ChevronLeft, ChevronRight } from "lucide-react";
 import { Product } from "@/types";
+import RelatedProducts from "@/components/RelatedProducts";
+import RecentlyViewed from "@/components/RecentlyViewed";
+import ShareButton from "@/components/ShareButton";
+import { addRecentlyViewed } from "@/lib/recentlyViewed";
 
 export default function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -35,6 +39,14 @@ export default function ProductDetailPage() {
 
         const data: Product = await res.json();
         setProduct(data);
+
+        // Add to recently viewed
+        addRecentlyViewed({
+          id: data.id,
+          title: data.title,
+          price: data.price,
+          image_urls: data.image_urls,
+        });
       } catch (err) {
         console.error(err);
         setError("حدث خطأ أثناء تحميل المنتج");
@@ -180,7 +192,10 @@ export default function ProductDetailPage() {
 
             {/* Info */}
             <div className="text-right bg-card border border-border rounded-lg p-6 shadow-sm">
-              <h1 className="text-3xl md:text-4xl font-bold mb-5 leading-tight">{product.title}</h1>
+              <div className="flex items-start justify-between mb-5">
+                <h1 className="text-3xl md:text-4xl font-bold leading-tight">{product.title}</h1>
+                <ShareButton title={product.title} url={typeof window !== "undefined" ? window.location.href : `/products/${product.id}`} />
+              </div>
 
              {product.price_before_discount  && (
               <p className="text-lg font-bold line-through decoration-2 text-muted-foreground opacity-60 mb-2">
@@ -259,6 +274,15 @@ export default function ProductDetailPage() {
           </div>
         </div>
       </section>
+
+      <RelatedProducts
+        productId={product.id}
+        categoryId={product.category_id}
+        brand={product.brand || undefined}
+        limit={4}
+      />
+
+      <RecentlyViewed currentProductId={product.id} />
 
       <Footer />
     </div>

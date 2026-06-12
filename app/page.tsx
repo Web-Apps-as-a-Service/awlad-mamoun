@@ -12,11 +12,19 @@ export default function Home() {
     <div className="min-h-screen bg-background text-foreground text-right">
       <Header />
       <Hero />
-      <About />
+      <div id="about">
+        <About />
+      </div>
       <HomeCategories />
-      <Products />
-      <Certifications />
-      <Contact />
+      <div id="products">
+        <Products />
+      </div>
+      <div id="certifications">
+        <Certifications />
+      </div>
+      <div id="contact">
+        <Contact />
+      </div>
       <Footer />
     </div>
   );

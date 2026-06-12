@@ -42,6 +42,7 @@ interface ProductsPageProps {
   // Product fetching configuration
   limit?: number;
   categoryId?: string; // For category pages
+  featured?: boolean; // Fetch only featured products
 
   // Layout configuration
   gridCols?: {
@@ -68,6 +69,7 @@ function ProductsPageContent({
   viewAllHref = "/products",
   limit = 12,
   categoryId,
+  featured = false,
   gridCols = { mobile: 1, desktop: 4 },
   sectionClassName = "py-20 px-4 bg-background",
   containerClassName = "max-w-6xl mx-auto",
@@ -155,25 +157,52 @@ function ProductsPageContent({
         }
 
         // Fetch products with filters and pagination
-        const productParams = new URLSearchParams();
-        productParams.append("page", currentPage.toString());
-        productParams.append("page_size", limit.toString());
-
-        if (searchQuery) productParams.append("search", searchQuery);
-        if (selectedCategory && selectedCategory !== "all") productParams.append("category_id", selectedCategory);
-        if (selectedBrand && selectedBrand !== "all") productParams.append("brand", selectedBrand);
-        if (selectedProductType && selectedProductType !== "all") productParams.append("product_type", selectedProductType);
-        if (selectedProductSize && selectedProductSize !== "all") productParams.append("product_size", selectedProductSize);
-        if (availableOnly) productParams.append("is_available", "true");
-
-        const response = await fetch(`/api/products?${productParams.toString()}`);
-        if (response.ok) {
-          const data = await response.json();
-          setProducts(data.products || []);
-          setTotalPages(data.totalPages || 1);
-          setTotal(data.total || 0);
+        if (featured && !showSearch) {
+          // Fetch featured products for homepage
+          const response = await fetch(`/api/products?featured=true&limit=${limit}`);
+          if (response.ok) {
+            const data = await response.json();
+            if (data && data.length > 0) {
+              setProducts(data);
+              setTotalPages(1);
+              setTotal(data.length);
+            } else {
+              // Fallback to latest products if no featured products
+              const productParams = new URLSearchParams();
+              productParams.append("limit", limit.toString());
+              const fallbackResponse = await fetch(`/api/products?${productParams.toString()}`);
+              if (fallbackResponse.ok) {
+                const fallbackData = await fallbackResponse.json();
+                setProducts(fallbackData.products || fallbackData || []);
+                setTotalPages(1);
+                setTotal(fallbackData.products?.length || fallbackData?.length || 0);
+              }
+            }
+          } else {
+            setError("حدث خطأ في تحميل المنتجات");
+          }
         } else {
-          setError("حدث خطأ في تحميل المنتجات");
+          // Regular paginated and filtered fetch
+          const productParams = new URLSearchParams();
+          productParams.append("page", currentPage.toString());
+          productParams.append("page_size", limit.toString());
+
+          if (searchQuery) productParams.append("search", searchQuery);
+          if (selectedCategory && selectedCategory !== "all") productParams.append("category_id", selectedCategory);
+          if (selectedBrand && selectedBrand !== "all") productParams.append("brand", selectedBrand);
+          if (selectedProductType && selectedProductType !== "all") productParams.append("product_type", selectedProductType);
+          if (selectedProductSize && selectedProductSize !== "all") productParams.append("product_size", selectedProductSize);
+          if (availableOnly) productParams.append("is_available", "true");
+
+          const response = await fetch(`/api/products?${productParams.toString()}`);
+          if (response.ok) {
+            const data = await response.json();
+            setProducts(data.products || []);
+            setTotalPages(data.totalPages || 1);
+            setTotal(data.total || 0);
+          } else {
+            setError("حدث خطأ في تحميل المنتجات");
+          }
         }
       } catch (error) {
         console.error("Failed to fetch data:", error);
@@ -192,6 +221,9 @@ function ProductsPageContent({
     selectedProductType,
     selectedProductSize,
     availableOnly,
+    limit,
+    featured,
+    showSearch,
   ]);
 
   if (isLoading) {

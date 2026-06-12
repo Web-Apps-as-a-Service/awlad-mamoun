@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Edit2, Trash2, Plus, Package, Search } from "lucide-react";
+import { Edit2, Trash2, Plus, Package, Search, Star } from "lucide-react";
 import { toast } from "sonner";
 import { getFirstImage } from "@/lib/utils";
 import { Product, Category } from "@/types";
@@ -207,7 +207,15 @@ export default function Dashboard() {
                           )}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="font-bold text-sm mb-1 truncate">{product.title}</h3>
+                          <h3 className="font-bold text-sm mb-1 truncate flex items-center gap-2">
+                            {product.title}
+                            {product.is_featured && (
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-yellow-100 text-yellow-700 text-[10px] font-semibold">
+                                <Star className="w-3 h-3 fill-current" size={10} />
+                                مميز
+                              </span>
+                            )}
+                          </h3>
                           {product.brand && (
                             <p className="text-xs text-muted-foreground">الماركة: {product.brand}</p>
                           )}
@@ -317,7 +325,15 @@ export default function Dashboard() {
                             )}
                           </div>
                           <div>
-                            <div className="font-bold">{product.title}</div>
+                            <div className="flex items-center gap-2 mb-1">
+                              <div className="font-bold">{product.title}</div>
+                              {product.is_featured && (
+                                <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-yellow-100 text-yellow-700 text-xs font-semibold">
+                                  <Star className="w-3 h-3 fill-current" size={12} />
+                                  مميز
+                                </span>
+                              )}
+                            </div>
                             <div className="text-xs text-muted-foreground">
                               {product.description}
                             </div>

@@ -1,6 +1,15 @@
+"use client";
+
 import { Bike, ShieldCheck, ShoppingBag, Wrench } from "lucide-react";
 
 export default function Hero() {
+  const handleScrollToProducts = () => {
+    const productsSection = document.getElementById("products");
+    if (productsSection) {
+      productsSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   const features = [
     { icon: Bike, label: "عجل لكل الاستخدامات" },
     { icon: Wrench, label: "قطع غيار موثوقة" },
@@ -29,12 +38,12 @@ export default function Hero() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3">
-            <a href="#products" className="bg-primary text-primary-foreground px-7 py-3 rounded-md hover:bg-primary/90 transition-colors font-semibold text-center">
+            <button
+              onClick={handleScrollToProducts}
+              className="bg-primary text-primary-foreground px-7 py-3 rounded-md hover:bg-primary/90 transition-colors font-semibold text-center"
+            >
               عرض المنتجات
-            </a>
-            <a href="#categories" className="border border-primary text-primary px-7 py-3 rounded-md hover:bg-secondary transition-colors font-semibold text-center">
-              تصفح الأقسام
-            </a>
+            </button>
           </div>
         </div>
 

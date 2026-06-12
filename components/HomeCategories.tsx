@@ -26,6 +26,11 @@ export default function HomeCategories() {
     fetchCategories();
   }, []);
 
+  // Hide section if categories count <= 1
+  if (!isLoading && categories.length <= 1) {
+    return null;
+  }
+
   if (isLoading) {
     return (
       <section id="categories" className="py-20 px-4 bg-secondary">
@@ -79,7 +84,7 @@ export default function HomeCategories() {
               {categories.slice(0, 3).map((category, index) => (
                 <Link
                   key={category.id}
-                  href={`/categories/${category.id}`}
+                  href={`/products?category=${category.id}`}
                   className="group"
                 >
                   <div
@@ -101,16 +106,6 @@ export default function HomeCategories() {
                   </div>
                 </Link>
               ))}
-            </div>
-
-            {/* View All Categories Link */}
-            <div className="text-center mt-12">
-              <Link
-                href="/categories"
-                className="inline-block bg-primary text-primary-foreground px-7 py-3 rounded-md font-semibold hover:bg-primary/90 transition-colors"
-              >
-                عرض كل الأقسام
-              </Link>
             </div>
           </>
         )}

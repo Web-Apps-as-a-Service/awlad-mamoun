@@ -252,6 +252,95 @@ export async function getProductsByCategory(categoryId: string) {
   return data;
 }
 
+export async function getFeaturedProducts(limit: number = 4) {
+  const supabase = getServerClient();
+  const { data, error } = await supabase
+    .from("products")
+    .select(`
+      *,
+      categories (
+        id,
+        name
+      )
+    `)
+    .eq("is_featured", true)
+    .eq("app_id", APP_ID)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  if (error) throw error;
+  return data;
+}
+
+export async function getRelatedProducts(productId: string, categoryId?: string | null, brand?: string | null, limit: number = 4) {
+  const supabase = getServerClient();
+  let query = supabase
+    .from("products")
+    .select(`
+      *,
+      categories (
+        id,
+        name
+      )
+    `)
+    .neq("id", productId)
+    .eq("app_id", APP_ID);
+
+  // If category is available, prioritize products from same category
+  if (categoryId) {
+    query = query.eq("category_id", categoryId);
+    // If brand is also available, prioritize same brand
+    if (brand) {
+      query = query.eq("brand", brand);
+    }
+  }
+
+  const { data, error } = await query.order("created_at", { ascending: false }).limit(limit);
+  if (error) throw error;
+  
+  // If we got no results from category/brand filter, try without brand
+  if ((!data || data.length === 0) && categoryId && brand) {
+    const fallbackQuery = supabase
+      .from("products")
+      .select(`
+        *,
+        categories (
+          id,
+          name
+        )
+      `)
+      .neq("id", productId)
+      .eq("app_id", APP_ID)
+      .eq("category_id", categoryId)
+      .order("created_at", { ascending: false })
+      .limit(limit);
+    const { data: fallbackData, error: fallbackError } = await fallbackQuery;
+    if (fallbackError) throw fallbackError;
+    return fallbackData;
+  }
+
+  // If still no results, get latest products from any category
+  if (!data || data.length === 0) {
+    const latestQuery = supabase
+      .from("products")
+      .select(`
+        *,
+        categories (
+          id,
+          name
+        )
+      `)
+      .neq("id", productId)
+      .eq("app_id", APP_ID)
+      .order("created_at", { ascending: false })
+      .limit(limit);
+    const { data: latestData, error: latestError } = await latestQuery;
+    if (latestError) throw latestError;
+    return latestData;
+  }
+
+  return data;
+}
+
 /* -------------------- Filtered and Paginated Products -------------------- */
 export async function getFilteredAndPaginatedProducts(params: {
   page?: number;

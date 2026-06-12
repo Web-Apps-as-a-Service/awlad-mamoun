@@ -16,6 +16,7 @@ export default function Products() {
       viewAllHref="/products"
       sectionClassName="py-20 px-4 bg-background"
       containerClassName="max-w-6xl mx-auto"
+      featured={true}
     />
   );
 }

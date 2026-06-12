@@ -13,6 +13,7 @@ export interface Product {
   product_type?: string | null;
   product_size?: string | null;
   is_available?: boolean | null;
+  is_featured?: boolean | null;
 }
 
 export interface ProductInsert {
@@ -27,6 +28,7 @@ export interface ProductInsert {
   product_type?: string | null;
   product_size?: string | null;
   is_available?: boolean | null;
+  is_featured?: boolean | null;
 }
 
 export interface Category {
